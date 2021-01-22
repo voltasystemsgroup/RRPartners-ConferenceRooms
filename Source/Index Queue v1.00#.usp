@@ -1,0 +1,52 @@
+
+
+#USER_SIMPLSHARP_LIBRARY "IndexQueue"
+
+
+#DEFINE_CONSTANT	MAX_ITEMS 50
+
+
+DIGITAL_INPUT	_SKIP_,
+				_SKIP_,
+				_SKIP_,
+				i[ MAX_ITEMS ],
+				_SKIP_;
+ANALOG_OUTPUT	_SKIP_,
+				iCount,
+				_SKIP_,
+				position[ MAX_ITEMS ];
+
+
+IndexQueue q;
+
+
+PUSH i
+{	
+	Integer index;
+	
+	index = GetLastModifiedArrayIndex( );
+	
+	q.AddIndex( index );
+}
+
+RELEASE i
+{	
+	Integer index;
+	
+	index = GetLastModifiedArrayIndex( );
+	
+	q.RemoveIndex( index );
+}
+
+Callback Function SetPosition( Integer index, Integer value ) { position[ index ] = value; }
+Callback Function SetCount( Integer value ) { iCount = value; }
+
+Function Main( )
+{
+	q.IndexQueueMain( MAX_ITEMS );
+	
+	RegisterDelegate( q, _Position,	SetPosition );
+	RegisterDelegate( q, _Count,	SetCount );
+}
+
+

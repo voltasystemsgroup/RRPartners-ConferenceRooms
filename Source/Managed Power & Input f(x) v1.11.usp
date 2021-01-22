@@ -1,0 +1,63 @@
+#DEFAULT_VOLATILE
+#DEFINE_CONSTANT MAX_PARAMS 33
+#DEFINE_CONSTANT MAX_IO 1
+
+ 
+//follow standard math equation y=f(x)
+
+DIGITAL_INPUT ENABLE_TRANSLATION_TO_ZERO;
+DIGITAL_INPUT ENABLE_UNKNOWN_X_TRANSLATION_TO_ZERO;
+
+
+ANALOG_INPUT x[ MAX_IO ];
+ANALOG_INPUT x_parameter[ MAX_PARAMS ];
+ANALOG_INPUT y[ MAX_PARAMS ];
+
+
+
+ANALOG_OUTPUT function_of_x[ MAX_IO ];
+
+Integer gnInitComplete;
+
+
+
+CHANGE x
+{
+	Integer nLMAI, nIndex;
+
+	nLMAI = GetLastModifiedArrayIndex( );
+
+	If( gnInitComplete )
+	{
+		If( x[ nLMAI ] = 0 )
+		{
+        	function_of_x[ nLMAI ] = y[ 1 ];	
+		}
+        Else
+		{
+			For( nIndex = 2 To MAX_PARAMS )
+			{
+	        	If( x[ nLMAI ] = x_parameter[ nIndex ] )
+					Break;
+			}
+			If( nIndex <= MAX_PARAMS )
+			{
+				If( y[ nIndex ] || ENABLE_TRANSLATION_TO_ZERO )
+				{
+					function_of_x[ nLMAI ] = y[ nIndex ];
+				}
+			}
+			Else If( ENABLE_UNKNOWN_X_TRANSLATION_TO_ZERO )
+			{
+				function_of_x[ nLMAI ] = 0;
+			}
+    	}		
+	}
+}
+
+Function Main( )
+{
+	gnInitComplete = 0;
+	gnInitComplete = !WaitForInitializationComplete( );
+}
+

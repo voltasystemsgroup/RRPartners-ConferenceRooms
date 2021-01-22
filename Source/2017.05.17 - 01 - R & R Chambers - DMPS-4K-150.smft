@@ -1,0 +1,23 @@
+<Device Model="DMPS3-4K-150-C">
+   <Network Type="Cresnet" Id="06">
+      <Device Model="CSC-DRPCN" DeviceId="0A"/>
+      <Device Model="CSM-QMTDC-163-1-CN,CSM-QMTDC-256-2-CN,CSM-QMTDC-250-2-CN,CSM-QMTDC-250-4-CN,CSM-QMTDC-275-4-CN," DeviceId="0B" Name="CSM-QMTDC-CN [WEST]"/>
+      <Device Model="CSM-QMTDC-163-1-CN,CSM-QMTDC-256-2-CN,CSM-QMTDC-250-2-CN,CSM-QMTDC-250-4-CN,CSM-QMTDC-275-4-CN," DeviceId="0C" Name="CSM-QMTDC-CN [NORTH]"/>
+      <Device Model="C2N-CBD-P" DeviceId="25"/>
+   </Network>
+   <Network Type="Ethernet" Id="07">
+      <Device Model="Core3 UI XPanel" DeviceId="03" Name="XPanel 2.0 Smart Graphics"/>
+      <Device Model="CEN-RFGW-EX" DeviceId="0F" Name="CEN-RFGW-EX (Ethernet)">
+         <Network Type="RF">
+            <Device Model="HR-150,HRI-150" DeviceId="03" Name="HR-150"/>
+            <Device Model="CHV-TSTATEX" DeviceId="04" Name="Crestron CHV-TSTATEX"/>
+            <Device Model="CLW-SWEX-P" DeviceId="11"/>
+            <Device Model="CLW-DIMEX-P" DeviceId="12"/>
+            <Device Model="TST-902" DeviceId="20" Name="TST-902 (EX)"/>
+         </Network>
+      </Device>
+      <Device Model="EslaveFT-TSC600" DeviceId="16" Name="FT-TSC600 Remote Ethernet Processing">
+         <Network Type="Cresnet" Id="01"/>
+      </Device>
+   </Network>
+</Device>

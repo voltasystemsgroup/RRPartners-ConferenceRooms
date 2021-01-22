@@ -1,0 +1,61 @@
+
+
+
+DIGITAL_INPUT CLEAR, ENTER, DIGIT[ 10 ];
+
+
+ANALOG_OUTPUT A_VALUE_ENTERED, A_VALUE_FB;
+
+STRING_OUTPUT S_VALUE_ENTERED, S_VALUE_FB;
+
+ANALOG_INPUT LOWER_LIMIT, UPPER_LIMIT;
+
+
+
+Signed_Long_Integer gnValue;
+String gsValue[ 6 ];
+
+
+
+Function ClearKeypad( )
+{
+	gnValue = 0;
+	gsValue = "";
+	A_VALUE_FB = gnValue;
+	S_VALUE_FB = gsValue;
+}
+
+
+PUSH DIGIT
+{
+	Integer nDigit;
+	
+	nDigit = GetLastModifiedArrayIndex( );
+	
+	nDigit = nDigit % 10;
+	
+	If( Len( gsValue ) < 6 )
+		gsValue = gsValue + LToA( nDigit );
+	
+	gnValue = AToL( gsValue ) % 65535;
+	
+	A_VALUE_FB = gnValue;
+	S_VALUE_FB = Left( gsValue, 5 );
+}
+
+PUSH ENTER
+{
+	If( gnValue >= LOWER_LIMIT && gnValue <= UPPER_LIMIT )
+	{
+		A_VALUE_ENTERED = gnValue;
+	}
+	S_VALUE_ENTERED = LToA( gnValue );	
+	ClearKeypad( );	
+}
+
+PUSH CLEAR
+{
+	ClearKeypad( );
+}
+
+

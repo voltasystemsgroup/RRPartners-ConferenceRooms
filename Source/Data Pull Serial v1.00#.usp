@@ -1,0 +1,79 @@
+
+
+#USER_SIMPLSHARP_LIBRARY "DataRouting"
+
+
+#DEFINE_CONSTANT	MAX_IO 51
+#DEFINE_CONSTANT	MAX_DATA_ITEMS 51
+#DEFINE_CONSTANT	MAX_CHARS 	255
+
+DIGITAL_INPUT	_SKIP_,
+				Enable,
+				_SKIP_;
+ANALOG_INPUT	PullFrom[ MAX_IO ],
+				_SKIP_;
+STRING_INPUT	Data[ MAX_DATA_ITEMS ][ MAX_CHARS ];
+
+STRING_OUTPUT	_SKIP_,
+				_SKIP_,
+				_SKIP_,
+				Output[ MAX_IO ];
+
+
+
+DataPull D;
+
+
+PUSH Enable
+{
+	Integer pullFromIndex;
+
+	for( pullFromIndex = 1 to MAX_IO )
+	{
+		D.ChangePullFrom( pullFromIndex );
+	}
+}
+
+CHANGE PullFrom
+{
+	Integer pullFromIndex;
+	
+	if( Enable )
+	{
+		pullFromIndex = GetLastModifiedArrayIndex( );
+
+		D.ChangePullFrom( pullFromIndex );
+	}
+}
+
+CHANGE Data
+{
+	Integer dataIndex;	
+	
+	if( Enable )
+	{
+		dataIndex = GetLastModifiedArrayIndex( );
+
+		D.ChangeData( dataIndex );
+	}
+}
+
+Callback Integer_Function Get_PullFrom( Integer pullFromIndex )
+{ 
+	return( PullFrom[ pullFromIndex ] + 1 );
+}
+
+Callback Function Set_Output( Integer outputIndex, Integer dataIndex )
+{
+	Output[ outputIndex ] = Data[ dataIndex ];
+}
+
+
+Function Main( )
+{
+	D.DataPullMain( MAX_IO );
+	
+	RegisterDelegate( d, _PullFrom,	Get_PullFrom );
+	RegisterDelegate( d, _Output,	Set_Output );
+}
+

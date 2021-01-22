@@ -1,0 +1,23 @@
+<Device Model="DMPS3-4K-150-C">
+   <Network Type="Cresnet" Id="06">
+      <Device Model="CSC-DRPCN" DeviceId="0A"/>
+      <Device Model="CSM-QMTDC-CN" DeviceId="0B" Name="CSM-QMTDC-CN [WEST]"/>
+      <Device Model="CSM-QMTDC-CN" DeviceId="0C" Name="CSM-QMTDC-CN [NORTH]"/>
+   </Network>
+   <Network Type="Ethernet" Id="07">
+      <Device Model="XPanel 2.0 Smart Graphics" DeviceId="03"/>
+      <Device Model="CEN-RFGW-EX (Ethernet)" DeviceId="0F">
+         <Network Type="RF">
+            <Device Model="HR-150" DeviceId="03"/>
+            <Device Model="CHV-TSTATEX" DeviceId="04" Name="Crestron CHV-TSTATEX"/>
+            <Device Model="CLW-SWEX-P" DeviceId="11"/>
+            <Device Model="CLW-DIMEX-P" DeviceId="12"/>
+            <Device Model="CLW-DIMEX-P" DeviceId="13"/>
+            <Device Model="TST-902 (EX)" DeviceId="20"/>
+         </Network>
+      </Device>
+      <Device Model="FT-TSC600 Remote Ethernet Processing" DeviceId="16">
+         <Network Type="Cresnet" Id="01"/>
+      </Device>
+   </Network>
+</Device>

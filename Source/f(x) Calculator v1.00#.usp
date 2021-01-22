@@ -1,0 +1,94 @@
+
+#USER_SIMPLSHARP_LIBRARY "f(x) Calculator"
+
+
+#DEFINE_CONSTANT MAX_IO	51
+#DEFINE_CONSTANT MAX_X_ITEMS 51
+ 
+
+DIGITAL_INPUT 	_SKIP_,
+			 	Enable,
+			 	_SKIP_,
+			 	EnableCalculationToZero,
+				EnableUnknownXCalculationToZero;
+ANALOG_INPUT 	_SKIP_,
+			 	Input[ MAX_IO ],
+				_SKIP_,
+			 	X[ MAX_X_ITEMS ],
+			 	_SKIP_,
+			 	FunctionOfX[ MAX_X_ITEMS ];
+
+ANALOG_OUTPUT 	_SKIP_,
+			 	_SKIP_,
+			 	_SKIP_,
+			 	_SKIP_,
+				_SKIP_,
+				_SKIP_,
+				Output[ MAX_IO ];
+
+fxCalculator C;
+
+
+
+Change Input
+{
+	Integer inputIndex;
+    
+	If( Enable )
+	{
+		inputIndex = GetlastModifiedArrayIndex( );
+	
+		C.InputChange( inputIndex );
+	}
+}
+
+
+
+Callback Integer_Function Get_Enable( ) 
+{ 
+	return( Enable ); 
+}
+
+Callback Integer_Function Get_EnableCalculationToZero( ) 
+{ 
+	return( EnableCalculationToZero ); 
+}
+
+Callback Integer_Function Get_EnableUnknownXCalculationToZero( ) 
+{ 
+	return( EnableUnknownXCalculationToZero ); 
+}
+
+Callback Integer_Function Get_Input( Integer inputIndex ) 
+{ 
+	return( Input[ inputIndex ] ); 
+}
+
+Callback Integer_Function Get_X( Integer XIndex ) 
+{ 
+	return( X[ XIndex ] ); 
+}
+
+Callback Integer_Function Get_FunctionOfX( Integer functionOfXIndex ) 
+{ 
+	return( FunctionOfX[ functionOfXIndex ] ); 
+}
+
+Callback Function Set_Output( Integer outputIndex, Integer value ) 
+{ 
+	Output[ outputIndex ] = value; 
+}
+
+Function Main( )
+{
+	C.fxCalculatorMain( MAX_IO, MAX_X_ITEMS );
+
+	RegisterDelegate( C, _Enable, Get_Enable );
+	RegisterDelegate( C, _EnableCalculationToZero, Get_EnableCalculationToZero );
+	RegisterDelegate( C, _EnableUnknownXCalculationToZero, Get_EnableUnknownXCalculationToZero );	
+	RegisterDelegate( C, _Input, Get_Input );	
+	RegisterDelegate( C, _X, Get_X );	
+	RegisterDelegate( C, _FunctionOfX, Get_FunctionOfX );
+
+	RegisterDelegate( C, _Output, Set_Output );	
+}

@@ -1,0 +1,24 @@
+[Crestron_Toolbox_Address_Book]
+
+[Entries]
+This .xadr file was created using Toolbox v2.41 or later.=:slot 01
+It is not compatible with this version of Toolbox.=:slot 02
+Please open a .adr Address Book to continue.=:slot 03
+
+[AddressBookInfo]
+Schema=2.0
+Version=1.0
+DefaultEntry=
+
+[ComSpecs]
+DMPS - Chambers=ssh 192.168.3.110
+DMPS - Lounge=auto 192.168.3.108
+RFGWEX - Chambers=auto 192.168.3.117
+RFGWEX - Lounge=auto 192.168.3.109
+
+[Notes]
+DMPS - Chambers=
+DMPS - Lounge=
+RFGWEX - Chambers=
+RFGWEX - Lounge=
+

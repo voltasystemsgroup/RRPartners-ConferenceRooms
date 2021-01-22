@@ -1,0 +1,157 @@
+
+#CATEGORY "0"
+#INCLUDEPATH "..\bin"
+#USER_SIMPLSHARP_LIBRARY "Scroll"
+
+#DEFINE_CONSTANT	MAX_SLOTS 8
+#DEFINE_CONSTANT	MAX_ITEMS 50
+
+
+
+
+DIGITAL_INPUT	_SKIP_,
+				INITIALIZE,
+				_SKIP_,
+				SCROLL_NEXT,
+				SCROLL_PREVIOUS;				
+ANALOG_INPUT 	_SKIP_,
+				SCROLL_INCREMENT,
+				SLOT_COUNT,
+				ITEM_COUNT,
+				_SKIP_,
+				_SKIP_,
+				_SKIP_,
+				SCROLL_PAGE,
+				SCROLL_POSITION,
+				_SKIP_,
+				SLOT_IN[ MAX_SLOTS ],
+				_SKIP_,
+				ITEM_IN[ MAX_ITEMS ];
+				
+DIGITAL_OUTPUT 	_SKIP_,
+				INITIALIZED_FB,
+				_SKIP_,
+				_SKIP_,
+				_SKIP_;
+ANALOG_OUTPUT	_SKIP_,
+				SCROLL_INCREMENT_FB,
+				SLOT_COUNT_FB,
+				ITEM_COUNT_FB,
+				_SKIP_,
+				SCROLL_PAGE_COUNT_FB,
+				_SKIP_,
+				SCROLL_PAGE_FB,
+				SCROLL_POSITION_FB,
+				_SKIP_,
+				SLOT_OUT[ MAX_SLOTS ],
+				_SKIP_,
+				ITEM_OUT[ MAX_ITEMS ];
+				
+								
+Scroll s;
+
+PUSH INITIALIZE
+{
+	s.Initialize( );
+}
+
+PUSH SCROLL_NEXT
+{
+	s.PushScrollNext( );
+}
+
+PUSH SCROLL_PREVIOUS
+{
+	s.PushScrollPrevious( );
+}
+
+CHANGE SCROLL_INCREMENT
+{
+	s.ScrollIncrement = SCROLL_INCREMENT;
+}
+
+CHANGE SLOT_COUNT
+{
+	s.SlotCount = SLOT_COUNT;
+}
+
+CHANGE ITEM_COUNT
+{
+	s.ItemCount = ITEM_COUNT;
+}
+
+CHANGE SCROLL_PAGE
+{
+	s.ScrollPage = SCROLL_PAGE;
+}
+
+CHANGE SCROLL_POSITION
+{
+	s.ScrollPosition = SCROLL_POSITION;
+}
+				
+CHANGE SLOT_IN
+{
+	Integer index;	
+	index = GetLastModifiedArrayIndex( );
+	s.ChangeSlotIn( index );
+} 
+
+CHANGE ITEM_IN
+{
+	Integer index;	
+	index = GetLastModifiedArrayIndex( );
+	s.ChangeItemIn( index );
+}
+
+Callback Function InitializedFb( 		Integer value ) { INITIALIZED_FB = value; }
+
+Callback Function ScrollIncrementFb( 	Integer value ) { SCROLL_INCREMENT_FB = value; }
+Callback Function SlotCountFb( 			Integer value ) { SLOT_COUNT_FB = value; }
+Callback Function ItemCountFb( 			Integer value ) { ITEM_COUNT_FB = value; }
+Callback Function ScrollPageCountFb( 	Integer value ) { SCROLL_PAGE_COUNT_FB = value; }
+Callback Function ScrollPageFb( 		Integer value ) { SCROLL_PAGE_FB = value; }
+Callback Function ScrollPositionFb( 	Integer value ) { SCROLL_POSITION_FB = value; }
+
+Callback Function SlotOut( 				Integer index, Integer refIndex ) 
+{ 
+	If( refIndex )
+		SLOT_OUT[ index ] = ITEM_IN[ refIndex ]; 
+	Else
+	    SLOT_OUT[ index ] = 0;
+}
+
+Callback Function ItemOut( 				Integer index, Integer refIndex ) { ITEM_OUT[ index ] = SLOT_IN[ refIndex ]; }
+
+Callback Integer_Function ScrollIncrement( ) { 	Return( SCROLL_INCREMENT ); }
+Callback Integer_Function SlotCount( ) { 		Return( SLOT_COUNT ); }
+Callback Integer_Function ItemCount( ) { 		Return( ITEM_COUNT ); }
+				
+Function Main( )
+{
+	s.ScrollMain( MAX_SLOTS, MAX_ITEMS );
+	
+	RegisterDelegate( s, _InitializedFb,		InitializedFb );
+
+	RegisterDelegate( s, _ScrollIncrementFb,	ScrollIncrementFb );
+	RegisterDelegate( s, _SlotCountFb, 			SlotCountFb );
+	RegisterDelegate( s, _ItemCountFb, 			ItemCountFb );
+	RegisterDelegate( s, _ScrollPageCountFb, 	ScrollPageCountFb );
+	RegisterDelegate( s, _ScrollPageFb, 		ScrollPageFb );
+	RegisterDelegate( s, _ScrollPositionFb, 	ScrollPositionFb ); 
+		
+	RegisterDelegate( s, _SlotOut, 				SlotOut );
+	RegisterDelegate( s, _ItemOut, 				ItemOut );
+	
+	RegisterDelegate( s, _ScrollIncrement,		ScrollIncrement );
+	RegisterDelegate( s, _SlotCount, 			SlotCount );
+	RegisterDelegate( s, _ItemCount, 			ItemCount );
+}
+				 
+				
+				   
+
+
+
+
+

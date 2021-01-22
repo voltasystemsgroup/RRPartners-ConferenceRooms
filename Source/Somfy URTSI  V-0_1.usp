@@ -1,0 +1,51 @@
+
+
+
+
+
+ANALOG_INPUT CONTROLLER, MOTOR;
+
+DIGITAL_INPUT UP, DOWN, STOP;
+
+STRING_OUTPUT TX;
+
+String gsController[ 2 ], gsMotor[ 2 ];
+
+CHANGE CONTROLLER
+{	
+	If( CONTROLLER > 0 && CONTROLLER < 10 )
+	{
+		gsController = "0" + IToA( CONTROLLER );
+	}
+	Else If( CONTROLLER >= 10 && CONTROLLER <= 16 )
+	{
+		gsController = IToA( CONTROLLER );
+	}
+}
+
+CHANGE MOTOR
+{	
+	If( MOTOR > 0 && MOTOR < 10 )
+	{
+		gsMotor = "0" + IToA( MOTOR );
+	}
+	Else If( MOTOR >= 10 && MOTOR <= 16 )
+	{
+		gsMotor = IToA( MOTOR );
+	}
+}
+
+PUSH UP
+{
+	TX = gsController + gsMotor + "U\n"; 	
+}
+
+PUSH DOWN
+{
+	TX = gsController + gsMotor + "D\n"; 	
+}
+
+PUSH STOP
+{
+	TX = gsController + gsMotor + "S\n"; 	
+}

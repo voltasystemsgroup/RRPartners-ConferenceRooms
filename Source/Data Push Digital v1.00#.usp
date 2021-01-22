@@ -1,0 +1,65 @@
+
+
+#USER_SIMPLSHARP_LIBRARY "DataRouting"
+
+
+#DEFINE_CONSTANT	MAX_IO 			51
+#DEFINE_CONSTANT	MAX_DATA_ITEMS 	51
+
+
+DIGITAL_INPUT	_SKIP_,
+				Enable,
+				_SKIP_,
+				Data[ MAX_DATA_ITEMS ],
+				_SKIP_;
+ANALOG_INPUT	PushTo[ MAX_DATA_ITEMS ];
+
+DIGITAL_OUTPUT	_SKIP_,
+				_SKIP_,
+				_SKIP_,
+				Output[ MAX_IO ];
+
+
+
+DataPush D;
+
+
+PUSH Enable
+{
+	Integer inputIndex;
+
+	for( inputIndex = 1 to MAX_DATA_ITEMS )
+	{
+		D.ChangeInput( inputIndex );
+	}
+}
+
+CHANGE PushTo, Data
+{	
+	Integer inputIndex;
+	
+	if( Enable )
+	{
+		inputIndex = GetLastModifiedArrayIndex( );
+	
+		D.ChangeInput( inputIndex );
+	}
+}
+
+Callback Integer_Function Get_PushTo( Integer pushToIndex ) 
+{ 
+	return( PushTo[ pushToIndex ] + 1 ); 
+}
+
+Callback Function Set_Output( Integer outputIndex, Integer dataIndex ) 
+{ 
+	Output[ outputIndex ] = Data[ dataIndex ]; 
+}
+
+
+Function Main( )
+{
+	RegisterDelegate( D, _PushTo, Get_PushTo );
+    RegisterDelegate( D, _Output, Set_Output );
+}
+

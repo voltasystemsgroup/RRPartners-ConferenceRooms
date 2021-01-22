@@ -1,0 +1,88 @@
+
+#CATEGORY "0"
+#INCLUDEPATH "..\bin"
+#USER_SIMPLSHARP_LIBRARY "DynamicAnalogInitialize"
+
+#DEFINE_CONSTANT	MAX_IO 51
+
+
+DIGITAL_INPUT	_SKIP_,
+				i[ MAX_IO ],
+				_SKIP_;
+ANALOG_INPUT	_SKIP_,
+				_SKIP_,
+				VALUE_IN,
+				_SKIP_,
+				VALUES[ MAX_IO ];
+
+DIGITAL_OUTPUT	_SKIP_,
+				o[ MAX_IO ],
+				_SKIP_;
+ANALOG_OUTPUT	o_fb,
+				_SKIP_,
+				VALUE_OUT,
+				_SKIP_,
+				NON_ZERO_VALUES_COUNT;
+				
+				
+DynamicAnalogInitialize d;				
+
+
+PUSH i
+{
+	Integer index;	
+	index = GetLastModifiedArrayIndex( );
+	d.PushIn( index );
+}
+
+CHANGE VALUE_IN
+{
+	d.ChangeValueIn( VALUE_IN );
+}
+
+CHANGE VALUES
+{
+	Integer index;	
+	index = GetLastModifiedArrayIndex( );
+	d.ChangeValue( index );
+}
+
+Callback Function ValueOut( 			Integer index ) { VALUE_OUT = VALUES[ index ]; }
+Callback Function NonZeroValueCountFb( 	Integer value ) { NON_ZERO_VALUES_COUNT = value; }
+Callback Function AOutFb( 				Integer value ) 
+{ 
+	if( value )
+		o_fb = value - 1;
+	else
+		o_fb = 0; 
+}
+Callback Function OutFb( Integer index, Integer value ) { o[ index ] = value; }
+Callback Integer_Function GetValues( 	Integer index ) 
+{ 
+	Integer value;
+	if( index ) 
+		value = VALUES[ index ];
+	else
+		value = 0;
+	return( value ); 
+}
+
+				
+				
+Function Main( )
+{
+	d.DynamicAnalogInitializeMain( MAX_IO );
+	
+	RegisterDelegate( d, _ValueOut,				ValueOut );
+	RegisterDelegate( d, _NonZeroValueCountFb,	NonZeroValueCountFb );
+	RegisterDelegate( d, _AOutFb,				AOutFb );
+	RegisterDelegate( d, _OutFb,				OutFb );
+	RegisterDelegate( d, _Values,				GetValues );
+}				
+				
+								
+
+
+
+				
+
